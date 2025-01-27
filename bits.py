@@ -27,7 +27,13 @@ class BitList:
         
     def arithmetic_shift_right(self):
         self.value >>= 1
-        
+    
+    def bitwise_and(self, other):
+        result = BitList('0')
+        result.value = self.value & other.value
+            
+        return result
+    
     @staticmethod
     def from_ints(*args):
         return BitList(''.join([ str(arg) for arg in args ]))
