@@ -22,6 +22,12 @@ class BitList:
     def __str__(self):
         return format(self.value, 'b')
     
+    def arithmetic_shift_left(self):
+        self.value <<= 1
+        
+    def arithmetic_shift_right(self):
+        self.value >>= 1
+        
     @staticmethod
     def from_ints(*args):
         return BitList(''.join([ str(arg) for arg in args ]))
