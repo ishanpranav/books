@@ -19,6 +19,9 @@ class BitList:
     def __eq__(self, other):
         return self.value == other.value
     
+    def __str__(self):
+        return format(self.value, 'b')
+    
     @staticmethod
     def from_ints(*args):
         return BitList(''.join([ str(arg) for arg in args ]))
