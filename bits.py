@@ -15,3 +15,7 @@ class BitList:
         except ValueError:
             raise ValueError(
                 "Format is invalid; does not consist of only 0 and 1")
+
+    def __eq__(self, other):
+        return self.value == other.value
+    
