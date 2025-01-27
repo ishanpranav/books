@@ -7,7 +7,7 @@ class DecodeError(Exception):
     
 class ChunkError(Exception):
     pass
-    
+
 class BitList:
     def __init__(self, value):
         try:
@@ -19,3 +19,6 @@ class BitList:
     def __eq__(self, other):
         return self.value == other.value
     
+    @staticmethod
+    def from_ints(*args):
+        return BitList(''.join([ str(arg) for arg in args ]))
