@@ -1,0 +1,5 @@
+# .gitignore
+# Copyright (c) 2025 Ishan Pranav
+# Licensed under the MIT license.
+
+__pycache__
