@@ -93,17 +93,19 @@ class BitList:
                     
                     for i in range(trailings[prefix]):
                         if not len(stack):
-                            raise ValueError("encoding not supported")
+                            raise DecodeError("invalid continuation byte")
                         
                         trailing = stack.pop() & 0xff
                         
                         if (trailing >> 6) & 0x3 != 0x2:
-                            raise ValueError("encoding not supported")
+                            raise DecodeError("invalid continuation byte")
                         
                         codepoint = (codepoint << 6) | trailing & 0x3f
                         
                     result += chr(codepoint)
-                    
+            
+            case _: raise ValueError("encoding not supported")
+            
         return result
         
     @staticmethod
