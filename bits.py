@@ -96,7 +96,6 @@ class BitList:
                 while len(stack):
                     leading = stack.pop() & 0xff
                     prefix = leading >> 4
-                    # print("leading", format(leading, 'b'))
                     
                     if prefix >> 3 == 0:
                         result += chr(leading)
