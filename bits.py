@@ -73,7 +73,7 @@ class BitList:
                     value >>= 7
             
             case 'utf-8':
-                trailings = { 0xf: 3, 0xe: 2, 0xc: 1, 0x8: 0 }
+                trailings = { 0xf: 3, 0xe: 2, 0xc: 1 }
                 stack = []
                 
                 while value:
@@ -82,10 +82,16 @@ class BitList:
                 
                 while len(stack):
                     leading = stack.pop() & 0xff
-                    popcount = leading >> 4
-                    codepoint = leading & ((1 << (7 - trailings[popcount])) - 1)
+                    prefix = leading >> 4
+                    # print("leading", format(leading, 'b'))
                     
-                    for i in range(trailings[popcount]):
+                    if prefix not in trailings:
+                        result += chr(leading)
+                        continue
+                        
+                    codepoint = leading & ((1 << (7 - trailings[prefix])) - 1)
+                    
+                    for i in range(trailings[prefix]):
                         if not len(stack):
                             raise ValueError("encoding not supported")
                         
@@ -103,3 +109,7 @@ class BitList:
     @staticmethod
     def from_ints(*args):
         return BitList("".join([ str(arg) for arg in args ]))
+
+
+b = BitList('01000001')
+print(b.decode('utf-8') == 'A')
