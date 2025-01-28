@@ -25,7 +25,7 @@ class BitList:
         self.length = len(value)
 
     def __eq__(self, other):
-        return self.value == other.value
+        return self.value == other.value and self.length == other.length
     
     def __str__(self):
         return format(self.value, 'b')
@@ -34,11 +34,24 @@ class BitList:
         self.value <<= 1
         
     def arithmetic_shift_right(self):
-        self.value >>= 1
+        value = self.value
+        length = 0
+        
+        while value:
+            value >>= 1
+            length += 1
+        
+        if length == self.length:
+            leftmost = 1 << (length - 1)
+        else:
+            leftmost = 0
+                
+        self.value = leftmost | (self.value >> 1)
     
     def bitwise_and(self, other):
         result = BitList('0')
         result.value = self.value & other.value
+        result.length = self.length
             
         return result
     
@@ -85,10 +98,13 @@ class BitList:
                     prefix = leading >> 4
                     # print("leading", format(leading, 'b'))
                     
-                    if prefix not in trailings:
+                    if prefix >> 3 == 0:
                         result += chr(leading)
                         continue
-                        
+                    
+                    if prefix not in trailings:
+                        raise DecodeError("invalid leading byte")
+                    
                     codepoint = leading & ((1 << (7 - trailings[prefix])) - 1)
                     
                     for i in range(trailings[prefix]):
@@ -111,7 +127,3 @@ class BitList:
     @staticmethod
     def from_ints(*args):
         return BitList("".join([ str(arg) for arg in args ]))
-
-
-b = BitList('01000001')
-print(b.decode('utf-8') == 'A')
