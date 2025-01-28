@@ -5,7 +5,7 @@
 # References:
 #  - https://docs.python.org/3/library/stdtypes.html#str.rjust
 
-# CONSTRAINT: May not use `bytes` or `encode`
+# CONSTRAINT: May not use `bytes` or `bytes.decode()`.
 
 class DecodeError(Exception):
     pass
@@ -85,9 +85,6 @@ class BitList:
                     popcount = leading >> 4
                     codepoint = leading & ((1 << (7 - trailings[popcount])) - 1)
                     
-                    # print("leading", format(leading, 'b'))
-                    # print("payload", format(payload, 'b'))
-                    
                     for i in range(trailings[popcount]):
                         if not len(stack):
                             raise ValueError("encoding not supported")
@@ -99,9 +96,6 @@ class BitList:
                         
                         codepoint = (codepoint << 6) | trailing & 0x3f
                         
-                        # print("trailing", format(trailing, 'b'))
-                        # print("payload", format(payload, 'b'))
-
                     result += chr(codepoint)
                     
         return result
@@ -109,10 +103,3 @@ class BitList:
     @staticmethod
     def from_ints(*args):
         return BitList("".join([ str(arg) for arg in args ]))
-
-new_bit_list = BitList('11000011000001')
-s = new_bit_list.decode('us-ascii')
-print(s) # aA
-b = BitList('11110000100111111001100010000010111000101000001010101100')
-s = b.decode('utf-8')
-print(s) # 😂€
