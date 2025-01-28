@@ -2,6 +2,9 @@
 # Copyright (c) 2025 Ishan Pranav
 # Licensed under the MIT license.
 
+# References:
+#  - https://docs.python.org/3/library/stdtypes.html#str.rjust
+
 class DecodeError(Exception):
     pass
     
@@ -11,10 +14,13 @@ class ChunkError(Exception):
 class BitList:
     def __init__(self, value):
         try:
-            self.value = int(value, 2)
+            integral = int(value, 2)
         except ValueError:
             raise ValueError(
                 "Format is invalid; does not consist of only 0 and 1")
+            
+        self.value = integral
+        self.length = len(value)
 
     def __eq__(self, other):
         return self.value == other.value
@@ -34,6 +40,26 @@ class BitList:
             
         return result
     
+    def chunk(self, length):
+        bits = str(self).rjust(self.length, '0')
+        
+        if len(bits) % length != 0:
+            raise ChunkError(
+                "the length of this instance is not divisible by 'length'")
+        
+        current = []
+        results = []
+        
+        for bit in bits:
+            current.append(int(bit))
+            
+            if len(current) == length:
+                results.append(current)
+                
+                current = []
+                
+        return results
+            
     @staticmethod
     def from_ints(*args):
         return BitList(''.join([ str(arg) for arg in args ]))
