@@ -1,4 +1,4 @@
-# Classes
+# Books
 
 This is a demonstration of classes implemented in Python for the NYU CSCI 479
 Data Management and Analysis course.
